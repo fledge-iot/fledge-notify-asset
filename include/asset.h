@@ -5,8 +5,9 @@
 #include <logger.h>
 #include <storage_client.h>
 
+typedef void (*FuncPtr)(void *, void *);
 /**
- * A simple asse notification class that sends an asset
+ * A simple asset notification class that sends an asset
  * via FogLAMP to the systems north of FogLAMP
  */
 class Asset {
@@ -15,9 +16,15 @@ class Asset {
 		~Asset();
 		void	notify(const std::string& notificationName, const std::string& triggerReason, const std::string& message);
 		void	reconfigure(const std::string& newConfig);
+		void	registerIngest(FuncPtr ingest, void *data)
+		{
+			m_ingest = ingest;
+			m_data = data;
+		};
 	private:
 		std::string	m_asset;
 		std::string	m_description;
-		StorageClient	*m_storage;
+		FuncPtr		m_ingest;
+		void		*m_data;
 };
 #endif

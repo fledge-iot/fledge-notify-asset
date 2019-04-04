@@ -25,7 +25,7 @@ Asset::Asset(ConfigCategory *category)
 	m_asset = category->getValue("asset");
 	m_description = category->getValue("description");
 	// TODO We have no access to the storage layer
-	m_storage = NULL;
+	m_ingest = NULL;
 }
 
 /**
@@ -46,17 +46,22 @@ void Asset::notify(const string& notificationName, const string& triggerReason, 
 {
 vector<Datapoint *>	datapoints;
 
+	if (!m_ingest)
+	{
+		return;
+	}
+
 	DatapointValue dpv1(m_description);
 	datapoints.push_back(new Datapoint("description", dpv1)); 
-	DatapointValue dpv2(triggerReason);
-	datapoints.push_back(new Datapoint("reason", dpv2));
        	DatapointValue dpv3(message);
 	datapoints.push_back(new Datapoint("message", dpv3));
 	DatapointValue dpv4(notificationName);
 	datapoints.push_back(new Datapoint("notification", dpv4));
 	Reading asset(m_asset, datapoints);
 
-	m_storage->readingAppend(asset);
+	Logger::getLogger()->debug("Asset notification: %s", asset.toJSON().c_str());
+
+	(*m_ingest)(m_data, &asset);
 }
 
 /**

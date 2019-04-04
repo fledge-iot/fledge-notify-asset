@@ -31,7 +31,7 @@ const char * default_config = QUOTE({
 	"asset" : {
 		"description" : "The asset name to create for the notification",
 		"type" : "string",
-		"default" : "asset",
+		"default" : "event",
 		"order" : "1",
 		"displayName" : "Asset"
 		},
@@ -65,7 +65,7 @@ extern "C" {
 static PLUGIN_INFORMATION info = {
         PLUGIN_NAME,              // Name
         VERSION,                  // Version
-        0,                        // Flags
+        SP_INGEST,                // Flags
         PLUGIN_TYPE_NOTIFICATION_DELIVERY,       // Type
         "1.0.0",                  // Interface version
         default_config	          // Default plugin configuration
@@ -113,6 +113,18 @@ bool plugin_deliver(PLUGIN_HANDLE handle,
 							deliveryName.c_str(), notificationName.c_str(), triggerReason.c_str(), message.c_str());
 	Asset *asset = (Asset *)handle;
 	asset->notify(notificationName, triggerReason, message);
+}
+
+/**
+ * Register a callback function used to ingest an asset to the FogLAMP buffer
+ */
+void plugin_registerIngest(PLUGIN_HANDLE *handle, void *func, void *data)
+{
+	Logger::getLogger()->info("Asset notification plugin: plugin_registerIngrest()");
+	Asset *asset = (Asset *)handle;
+	
+	asset->registerIngest((FuncPtr)func, data);
+	return;
 }
 
 /**
