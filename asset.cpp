@@ -1,0 +1,72 @@
+/*
+ * FogLAMP "asset" notification delivery plugin.
+ *
+ * Copyright (c) 2019 Dianomic Systems
+ *
+ * Released under the Apache 2.0 Licence
+ *
+ * Author: Mark Riddoch           
+ */
+#include "asset.h"
+#include <logger.h>
+#include <reading.h>
+
+using namespace std;
+using namespace rapidjson;
+
+
+/**
+ * Construct a asset notification plugin
+ *
+ * @param category	The configuration of the plugin
+ */
+Asset::Asset(ConfigCategory *category)
+{
+	m_asset = category->getValue("asset");
+	m_description = category->getValue("description");
+	// TODO We have no access to the storage layer
+	m_storage = NULL;
+}
+
+/**
+ * The destructure for the asset plugin
+ */
+Asset::~Asset()
+{
+}
+
+/**
+ * Send a notification via the Asset by ingesting into the FogLAMP storage layer
+ *
+ * @param notificationName 	The name of this notification
+ * @param triggerReason		Why the notification is being sent
+ * @param message		The message to send
+ */
+void Asset::notify(const string& notificationName, const string& triggerReason, const string& message)
+{
+vector<Datapoint *>	datapoints;
+
+	DatapointValue dpv1(m_description);
+	datapoints.push_back(new Datapoint("description", dpv1)); 
+	DatapointValue dpv2(triggerReason);
+	datapoints.push_back(new Datapoint("reason", dpv2));
+       	DatapointValue dpv3(message);
+	datapoints.push_back(new Datapoint("message", dpv3));
+	DatapointValue dpv4(notificationName);
+	datapoints.push_back(new Datapoint("notification", dpv4));
+	Reading asset(m_asset, datapoints);
+
+	m_storage->readingAppend(asset);
+}
+
+/**
+ * Reconfigure the asset delivery plugin
+ *
+ * @param newConfig	The new configuration
+ */
+void Asset::reconfigure(const string& newConfig)
+{
+	ConfigCategory category("new", newConfig);
+	m_asset = category.getValue("asset");
+	m_description = category.getValue("description");
+}
