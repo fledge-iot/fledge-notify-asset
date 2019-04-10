@@ -43,7 +43,7 @@ const char * default_config = QUOTE({
 		"displayName" : "Description"
 		},
 	"enable": {
-		"description": "A switch that can be used to enable or disable execution of the email notification plugin.",
+		"description": "A switch that can be used to enable or disable delivery of the asset notification plugin.",
 		"type": "boolean",
 		"displayName" : "Enabled",
 		"default": "false", 
