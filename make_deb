@@ -80,17 +80,20 @@ fi
 plugin_version=`cat ${GIT_ROOT}/VERSION`
 # Get FogLAMP version dependency from foglamp_version file
 foglamp_version=`cat ${GIT_ROOT}/foglamp.version | tr -d ' ' | grep 'foglamp_version' | head -1 | sed -e 's/\(.*\)version\(.*\)/\2/g'`
+# Get service notification version dependency from service_notification.version file
+service_notification_version=`cat ${GIT_ROOT}/service_notification.version | tr -d ' ' | grep 'service_notification_version' | head -1 | sed -e 's/\(.*\)version\(.*\)/\2/g'`
 BUILD_ROOT="${GIT_ROOT}/packages/build"
 
 # Final package name
 package_name="foglamp-${plugin_type}-${plugin_name}-${plugin_version}-${architecture}"
 
 # Print the summary of findings
-echo "The package root directory is   : ${GIT_ROOT}"
-echo "The FogLAMP required version    : ${foglamp_version}"
-echo "The package will be built in    : ${BUILD_ROOT}"
-echo "The architecture is set as      : ${architecture}"
-echo "The package name is             : ${package_name}"
+echo "The package root directory is                 : ${GIT_ROOT}"
+echo "The FogLAMP required version                  : ${foglamp_version}"
+echo "The Service notification required version     : ${service_notification_version}"
+echo "The package will be built in                  : ${BUILD_ROOT}"
+echo "The architecture is set as                    : ${architecture}"
+echo "The package name is                           : ${package_name}"
 echo
 
 # Create the package directory. If a directory with the same name exists,
@@ -145,6 +148,7 @@ cp -R ${GIT_ROOT}/packages/Debian/common/* .
 cp -R ${GIT_ROOT}/packages/Debian/${architecture}/* .
 sed -i "s/Version: 1.0.0/Version: ${plugin_version}/g" DEBIAN/control
 sed -i "s/Depends: foglamp/Depends: foglamp (${foglamp_version})/g" DEBIAN/control
+sed -i "s/foglamp-service-notification/foglamp-service-notification (${service_notification_version})/g" DEBIAN/control
 
 mkdir -p usr/local/foglamp
 cd usr/local/foglamp
