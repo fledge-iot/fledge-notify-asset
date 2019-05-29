@@ -13,7 +13,7 @@ requirements="foglamp,foglamp-service-notification"
 case "$arch" in
 	x86_64)
 		;;
-	armhf)
+	armv7l)
 		;;
 	aarch64)
 		;;
