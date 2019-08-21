@@ -68,7 +68,7 @@ vector<Datapoint *>	datapoints;
 	datapoints.push_back(new Datapoint("rule", dpv4));
 	Reading asset(m_asset, datapoints);
 
-	Logger::getLogger()->error("Asset notification: %s", asset.toJSON().c_str());
+	Logger::getLogger()->info("Asset notification: %s", asset.toJSON().c_str());
 
 	(*m_ingest)(m_data, &asset);
 }
