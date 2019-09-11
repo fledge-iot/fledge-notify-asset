@@ -1,5 +1,5 @@
 /*
- * FogLAMP "asset" notification delivery plugin.
+ * Fledge "asset" notification delivery plugin.
  *
  * Copyright (c) 2019 Dianomic Systems
  *
@@ -36,7 +36,7 @@ Asset::~Asset()
 }
 
 /**
- * Send a notification via the Asset by ingesting into the FogLAMP storage layer
+ * Send a notification via the Asset by ingesting into the Fledge storage layer
  *
  * @param notificationName 	The name of this notification
  * @param triggerReason		Why the notification is being sent

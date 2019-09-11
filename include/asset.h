@@ -8,7 +8,7 @@
 typedef void (*FuncPtr)(void *, void *);
 /**
  * A simple asset notification class that sends an asset
- * via FogLAMP to the systems north of FogLAMP
+ * via Fledge to the systems north of Fledge
  */
 class Asset {
 	public:

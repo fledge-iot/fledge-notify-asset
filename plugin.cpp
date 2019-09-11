@@ -1,5 +1,5 @@
 /*
- * FogLAMP "asset" notification plugin.
+ * Fledge "asset" notification plugin.
  *
  * Copyright (c) 2019 Dianomic Systems
  *
@@ -113,7 +113,7 @@ bool plugin_deliver(PLUGIN_HANDLE handle,
 }
 
 /**
- * Register a callback function used to ingest an asset to the FogLAMP buffer
+ * Register a callback function used to ingest an asset to the Fledge buffer
  */
 void plugin_registerIngest(PLUGIN_HANDLE *handle, void *func, void *data)
 {
