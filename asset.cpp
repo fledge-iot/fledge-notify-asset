@@ -53,13 +53,22 @@ vector<Datapoint *>	datapoints;
 
 	DatapointValue dpv1(m_description);
 	datapoints.push_back(new Datapoint("description", dpv1)); 
-       	DatapointValue dpv3(message);
-	datapoints.push_back(new Datapoint("message", dpv3));
+
+	Document doc;
+	doc.Parse(triggerReason.c_str());
+	if (!doc.HasParseError())
+	{
+		if (doc.HasMember("reason"))
+		{
+		       	DatapointValue dpv3(doc["reason"].GetString());
+			datapoints.push_back(new Datapoint("event", dpv3));
+		}
+	}
 	DatapointValue dpv4(notificationName);
-	datapoints.push_back(new Datapoint("notification", dpv4));
+	datapoints.push_back(new Datapoint("rule", dpv4));
 	Reading asset(m_asset, datapoints);
 
-	Logger::getLogger()->debug("Asset notification: %s", asset.toJSON().c_str());
+	Logger::getLogger()->info("Asset notification: %s", asset.toJSON().c_str());
 
 	(*m_ingest)(m_data, &asset);
 }
