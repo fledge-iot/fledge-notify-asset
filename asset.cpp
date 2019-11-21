@@ -67,7 +67,7 @@ vector<Datapoint *>	datapoints;
 			}
 			else if (doc["reason"].IsInt64())
 			{
-		       		DatapointValue dpv3(doc["reason"].GetInt64());
+		       		DatapointValue dpv3((long) doc["reason"].GetInt64());
 				datapoints.push_back(new Datapoint("event", dpv3));
 			}
 			else
