@@ -60,8 +60,20 @@ vector<Datapoint *>	datapoints;
 	{
 		if (doc.HasMember("reason"))
 		{
-		       	DatapointValue dpv3(doc["reason"].GetString());
-			datapoints.push_back(new Datapoint("event", dpv3));
+			if (doc["reason"].IsString())
+			{
+		       		DatapointValue dpv3(doc["reason"].GetString());
+				datapoints.push_back(new Datapoint("event", dpv3));
+			}
+			else if (doc["reason"].IsInt64())
+			{
+		       		DatapointValue dpv3((long) doc["reason"].GetInt64());
+				datapoints.push_back(new Datapoint("event", dpv3));
+			}
+			else
+			{
+				Logger::getLogger()->error("The reason returned from the rule for delivery is of a bad type");
+			}
 		}
 	}
 	DatapointValue dpv4(notificationName);
