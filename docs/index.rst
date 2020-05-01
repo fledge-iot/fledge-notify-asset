@@ -13,7 +13,7 @@ Once you have created your notification rule and move on to the delivery mechani
   - Click *Next*
 
     +-----------+
-    | |aaset_1| |
+    | |asset_1| |
     +-----------+
 
   - Now configure the asset delivery plugin
