@@ -18,7 +18,7 @@
 
 #define PLUGIN_NAME "asset"
 
-const char * default_config = QUOTE({
+static const char * default_config = QUOTE({
 	"plugin" : { 
 		"description" : "Asset notification plugin",
 		"type" : "string",
