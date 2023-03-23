@@ -42,13 +42,12 @@ Asset::~Asset()
  * @param triggerReason		Why the notification is being sent
  * @param message		The message to send
  */
-void Asset::notify(const string& notificationName, const string& triggerReason, const string& message)
+bool Asset::notify(const string& notificationName, const string& triggerReason, const string& message)
 {
-vector<Datapoint *>	datapoints;
-
+	vector<Datapoint *>	datapoints;
 	if (!m_ingest)
 	{
-		return;
+		return false;
 	}
 
 	DatapointValue dpv1(m_description);
@@ -73,6 +72,7 @@ vector<Datapoint *>	datapoints;
 			else
 			{
 				Logger::getLogger()->error("The reason returned from the rule for delivery is of a bad type");
+				return false;
 			}
 		}
 	}
@@ -83,6 +83,7 @@ vector<Datapoint *>	datapoints;
 	Logger::getLogger()->info("Asset notification: %s", asset.toJSON().c_str());
 
 	(*m_ingest)(m_data, &asset);
+	return true;
 }
 
 /**
