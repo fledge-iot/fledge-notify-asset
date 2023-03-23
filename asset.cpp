@@ -76,13 +76,28 @@ bool Asset::notify(const string& notificationName, const string& triggerReason, 
 			}
 		}
 	}
-	DatapointValue dpv4(notificationName);
-	datapoints.push_back(new Datapoint("rule", dpv4));
-	Reading asset(m_asset, datapoints);
+	else
+	{
+		Logger::getLogger()->error("Invalid JSON: Document Parsing error");
+		return false;
+	}
 
-	Logger::getLogger()->info("Asset notification: %s", asset.toJSON().c_str());
+	try{
+		DatapointValue dpv4(notificationName);
+		datapoints.push_back(new Datapoint("rule", dpv4));
+		Reading asset(m_asset, datapoints);
 
-	(*m_ingest)(m_data, &asset);
+		Logger::getLogger()->info("Asset notification: %s", asset.toJSON().c_str());
+
+		(*m_ingest)(m_data, &asset);
+	}
+	catch (exception& e) {
+                Logger::getLogger()->error("Asset notification failed: %s", e.what());
+                return false;
+        } catch (...) {
+                Logger::getLogger()->error("Asset notification failed.");
+                return false;
+        }
 	return true;
 }
 
