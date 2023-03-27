@@ -14,7 +14,7 @@ class Asset {
 	public:
 		Asset(ConfigCategory *config);
 		~Asset();
-		void	notify(const std::string& notificationName, const std::string& triggerReason, const std::string& message);
+		bool	notify(const std::string& notificationName, const std::string& triggerReason, const std::string& message);
 		void	reconfigure(const std::string& newConfig);
 		void	registerIngest(FuncPtr ingest, void *data)
 		{
