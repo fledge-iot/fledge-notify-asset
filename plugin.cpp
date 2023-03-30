@@ -29,7 +29,8 @@ static const char * default_config = QUOTE({
 		"type" : "string",
 		"default" : "event",
 		"order" : "1",
-		"displayName" : "Asset"
+		"displayName" : "Asset",
+		"mandatory": "true"
 		},
 	"description" : {
 		"description" : "The event description to add",
