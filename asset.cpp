@@ -41,14 +41,15 @@ Asset::~Asset()
  * @param notificationName 	The name of this notification
  * @param triggerReason		Why the notification is being sent
  * @param message		The message to send
+ * @return bool			whether notify succeded or false
  */
-void Asset::notify(const string& notificationName, const string& triggerReason, const string& message)
+bool Asset::notify(const string& notificationName, const string& triggerReason, const string& message)
 {
-vector<Datapoint *>	datapoints;
-
+	vector<Datapoint *>	datapoints;
 	if (!m_ingest)
 	{
-		return;
+		Logger::getLogger()->error("m_ingest is null");
+		return false;
 	}
 
 	DatapointValue dpv1(m_description);
@@ -73,16 +74,33 @@ vector<Datapoint *>	datapoints;
 			else
 			{
 				Logger::getLogger()->error("The reason returned from the rule for delivery is of a bad type");
+				return false;
 			}
 		}
 	}
-	DatapointValue dpv4(notificationName);
-	datapoints.push_back(new Datapoint("rule", dpv4));
-	Reading asset(m_asset, datapoints);
+	else
+	{
+		Logger::getLogger()->error("Invalid JSON: Document Parsing error");
+		return false;
+	}
 
-	Logger::getLogger()->info("Asset notification: %s", asset.toJSON().c_str());
+	try{
+		DatapointValue dpv4(notificationName);
+		datapoints.push_back(new Datapoint("rule", dpv4));
+		Reading asset(m_asset, datapoints);
 
-	(*m_ingest)(m_data, &asset);
+		Logger::getLogger()->info("Asset notification: %s", asset.toJSON().c_str());
+
+		(*m_ingest)(m_data, &asset);
+	}
+	catch (exception& e) {
+                Logger::getLogger()->error("Asset notification failed: %s", e.what());
+                return false;
+        } catch (...) {
+                Logger::getLogger()->error("Asset notification failed.");
+                return false;
+        }
+	return true;
 }
 
 /**

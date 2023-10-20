@@ -29,7 +29,8 @@ static const char * default_config = QUOTE({
 		"type" : "string",
 		"default" : "event",
 		"order" : "1",
-		"displayName" : "Asset"
+		"displayName" : "Asset",
+		"mandatory": "true"
 		},
 	"description" : {
 		"description" : "The event description to add",
@@ -108,8 +109,7 @@ bool plugin_deliver(PLUGIN_HANDLE handle,
 	Logger::getLogger()->info("Asset notification plugin_deliver(): deliveryName=%s, notificationName=%s, triggerReason=%s, message=%s",
 							deliveryName.c_str(), notificationName.c_str(), triggerReason.c_str(), message.c_str());
 	Asset *asset = (Asset *)handle;
-	asset->notify(notificationName, triggerReason, message);
-	return true;
+	return asset->notify(notificationName, triggerReason, message);
 }
 
 /**
